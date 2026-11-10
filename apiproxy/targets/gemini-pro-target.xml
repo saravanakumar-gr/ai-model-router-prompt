@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TargetEndpoint name="gemini-pro-target">
+    <HTTPTargetConnection>
+        <URL>https://<VERTEX_REGION>-aiplatform.googleapis.com/v1/projects/<YOUR_GCP_PROJECT_ID>/locations/<VERTEX_REGION>/publishers/google/models/gemini-2.5-pro:generateContent</URL>
+        <Authentication>
+            <GoogleAccessToken>
+                <Scopes>
+                    <Scope>https://www.googleapis.com/auth/cloud-platform</Scope>
+                </Scopes>
+            </GoogleAccessToken>
+        </Authentication>
+    </HTTPTargetConnection>
+</TargetEndpoint>

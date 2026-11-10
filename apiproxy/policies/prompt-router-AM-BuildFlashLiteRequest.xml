@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="prompt-router-AM-BuildFlashLiteRequest">
+    <DisplayName>AM-BuildFlashLiteRequest</DisplayName>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignVariable>
+        <Name>flow.flash_lite_payload</Name>
+        <Template>{
+  "systemInstruction": {
+    "parts": [
+      {
+        "text": "You are an AI Gateway prompt complexity classifier and fast responder.\nAnalyze the user's prompt and classify it as either 'SIMPLE' or 'COMPLEX':\n- 'SIMPLE': Factual lookups, basic math, greetings, simple definitions, translations, or single-step questions that can be answered concisely.\n- 'COMPLEX': Multi-step reasoning, architecture design, debugging/writing complex code, legal/financial analysis, or detailed multi-part essays.\n\nRules:\n1. If 'SIMPLE', set 'classification' to 'SIMPLE' and provide the direct, helpful textual answer in 'answer'.\n2. If 'COMPLEX', set 'classification' to 'COMPLEX' and set 'answer' to an empty string \"\"."
+      }
+    ]
+  },
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        {
+          "text": "{jsonPath($.prompt,request.content)}{jsonPath($.contents[0].parts[0].text,request.content)}"
+        }
+      ]
+    }
+  ],
+  "generationConfig": {
+    "temperature": 0.1,
+    "responseMimeType": "application/json",
+    "responseSchema": {
+      "type": "OBJECT",
+      "properties": {
+        "classification": {
+          "type": "STRING",
+          "enum": ["SIMPLE", "COMPLEX"]
+        },
+        "answer": {
+          "type": "STRING"
+        }
+      },
+      "required": ["classification", "answer"]
+    }
+  }
+}</Template>
+    </AssignVariable>
+    <Set>
+        <Headers>
+            <Header name="Content-Type">application/json</Header>
+        </Headers>
+        <Payload contentType="application/json">{
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        {
+          "text": "{jsonPath($.prompt,request.content)}{jsonPath($.contents[0].parts[0].text,request.content)}"
+        }
+      ]
+    }
+  ],
+  "generationConfig": {
+    "temperature": 0.3,
+    "maxOutputTokens": 4096
+  }
+}</Payload>
+    </Set>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

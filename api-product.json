@@ -1,0 +1,33 @@
+{
+  "name": "ai-model-router-prompt-product",
+  "displayName": "AI Model Router Prompt Classifier Product",
+  "approvalType": "auto",
+  "description": "API Product for AI Model Router Prompt Classifier (Flash-Lite short-circuit + Gemini Pro routing)",
+  "environments": [
+    "<YOUR_APIGEE_ENV>"
+  ],
+  "operationGroup": {
+    "operationConfigType": "proxy",
+    "operationConfigs": [
+      {
+        "apiSource": "ai-model-router-prompt",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "GET",
+              "POST"
+            ]
+          },
+          {
+            "resource": "/**",
+            "methods": [
+              "GET",
+              "POST"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

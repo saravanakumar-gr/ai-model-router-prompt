@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="prompt-router-AM-SetSimpleResponse">
+    <DisplayName>AM-SetSimpleResponse</DisplayName>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <Set>
+        <Headers>
+            <Header name="Content-Type">application/json</Header>
+            <Header name="X-Model-Classification">SIMPLE</Header>
+            <Header name="X-Routed-Model">gemini-2.5-flash-lite</Header>
+            <Header name="X-Short-Circuited">true</Header>
+        </Headers>
+        <Payload contentType="application/json">{flashLiteResponse.content}</Payload>
+        <StatusCode>200</StatusCode>
+        <ReasonPhrase>OK</ReasonPhrase>
+    </Set>
+    <AssignTo createNew="false" transport="http" type="response"/>
+</AssignMessage>

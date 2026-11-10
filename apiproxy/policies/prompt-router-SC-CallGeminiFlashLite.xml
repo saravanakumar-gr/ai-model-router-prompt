@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ServiceCallout async="false" continueOnError="false" enabled="true" name="prompt-router-SC-CallGeminiFlashLite">
+    <DisplayName>SC-CallGeminiFlashLite</DisplayName>
+    <Request clearPayload="true" variable="flashLiteRequest">
+        <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+        <Set>
+            <Headers>
+                <Header name="Content-Type">application/json</Header>
+            </Headers>
+            <Payload contentType="application/json">{flow.flash_lite_payload}</Payload>
+            <Verb>POST</Verb>
+        </Set>
+    </Request>
+    <Response>flashLiteResponse</Response>
+    <Timeout>30000</Timeout>
+    <HTTPTargetConnection>
+        <Authentication>
+            <GoogleAccessToken>
+                <Scopes>
+                    <Scope>https://www.googleapis.com/auth/cloud-platform</Scope>
+                </Scopes>
+            </GoogleAccessToken>
+        </Authentication>
+        <URL>https://<VERTEX_REGION>-aiplatform.googleapis.com/v1/projects/<YOUR_GCP_PROJECT_ID>/locations/<VERTEX_REGION>/publishers/google/models/gemini-2.5-flash-lite:generateContent</URL>
+    </HTTPTargetConnection>
+</ServiceCallout>

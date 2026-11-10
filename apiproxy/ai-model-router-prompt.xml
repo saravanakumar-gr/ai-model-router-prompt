@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="1" name="ai-model-router-prompt">
+    <DisplayName>AI Model Router Prompt Classifier</DisplayName>
+    <Description>Routes prompts based on complexity using Gemini Flash-Lite ServiceCallout classification — short-circuits SIMPLE prompts directly from Flash-Lite and routes COMPLEX prompts to Gemini Pro.</Description>
+    <BasePaths>/ai-model-router-prompt</BasePaths>
+    <Policies>
+        <Policy>prompt-router-AM-BuildFlashLiteRequest</Policy>
+        <Policy>prompt-router-AM-SetSimpleResponse</Policy>
+        <Policy>prompt-router-EV-ParseFlashResponse</Policy>
+        <Policy>prompt-router-SC-CallGeminiFlashLite</Policy>
+        <Policy>verify-api-key-Verify-API-Key</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <TargetEndpoints>
+        <TargetEndpoint>gemini-pro-target</TargetEndpoint>
+    </TargetEndpoints>
+</APIProxy>

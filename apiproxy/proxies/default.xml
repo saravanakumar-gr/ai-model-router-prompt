@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <HTTPProxyConnection>
+        <BasePath>/ai-model-router-prompt</BasePath>
+    </HTTPProxyConnection>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>verify-api-key-Verify-API-Key</Name>
+            </Step>
+            <Step>
+                <Name>prompt-router-AM-BuildFlashLiteRequest</Name>
+            </Step>
+            <Step>
+                <Name>prompt-router-SC-CallGeminiFlashLite</Name>
+            </Step>
+            <Step>
+                <Name>prompt-router-EV-ParseFlashResponse</Name>
+            </Step>
+        </Request>
+    </PreFlow>
+    <PostFlow name="PostFlow">
+        <Response>
+            <Step>
+                <Name>prompt-router-AM-SetSimpleResponse</Name>
+                <Condition>flashlite.classification ~~ "(?s).*classification.\s*:\s*.SIMPLE.*"</Condition>
+            </Step>
+        </Response>
+    </PostFlow>
+    <RouteRule name="GeminiProTarget">
+        <Condition>flashlite.classification ~~ "(?s).*classification.\s*:\s*.COMPLEX.*"</Condition>
+        <TargetEndpoint>gemini-pro-target</TargetEndpoint>
+    </RouteRule>
+    <RouteRule name="NoRoute"/>
+</ProxyEndpoint>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="prompt-router-EV-ParseFlashResponse">
+    <DisplayName>EV-ParseFlashResponse</DisplayName>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <Source clearPayload="false">flashLiteResponse</Source>
+    <VariablePrefix>flashlite</VariablePrefix>
+    <JSONPayload>
+        <Variable name="classification" type="string">
+            <JSONPath>$.candidates[0].content.parts[0].text</JSONPath>
+        </Variable>
+    </JSONPayload>
+</ExtractVariables>
