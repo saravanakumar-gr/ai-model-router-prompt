@@ -1,6 +1,6 @@
 # Apigee AI Model Router (Prompt Complexity Classifier)
 
-This repository demonstrates how to use a **helper model** in Apigee X (`ai-model-router-prompt`) to evaluate incoming LLM prompts and dynamically route them based on complexity—using **100% out-of-the-box declarative Apigee policies** (with zero custom JavaScript or Python code).
+This repository demonstrates how to use a **helper model** in Apigee X (`ai-model-router-prompt`) to evaluate incoming LLM prompts and dynamically route them based on complexity.
 
 The helper model can be any model, including a custom or self-managed model. This repository uses **Gemini 2.5 Flash-Lite** (`gemini-2.5-flash-lite`) as an example helper model:
 * **If the prompt is `SIMPLE`** (factual lookups, basic math, greetings, simple definitions, or translations): The helper model classifies it as `"SIMPLE"` and **answers the prompt directly in the same call**, allowing Apigee to short-circuit and return the response immediately without invoking a larger model.
