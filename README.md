@@ -1,9 +1,10 @@
 # Apigee AI Model Router (Prompt Complexity Classifier)
 
-This repository contains a reference Apigee X API proxy (`ai-model-router-prompt`) that dynamically routes incoming LLM prompts based on their complexity using **100% out-of-the-box declarative Apigee policies** (with zero custom JavaScript or Python code).
+This repository demonstrates how to use a **helper model** in Apigee X (`ai-model-router-prompt`) to evaluate incoming LLM prompts and dynamically route them based on complexity—using **100% out-of-the-box declarative Apigee policies** (with zero custom JavaScript or Python code).
 
-* **Fast & Cost-Effective Short-Circuiting (`SIMPLE`)**: Every incoming prompt is first evaluated by **Gemini 2.5 Flash-Lite** (`gemini-2.5-flash-lite`) via an Apigee `ServiceCallout` using structured JSON output (`responseSchema`). If the prompt is classified as `SIMPLE` (factual lookups, basic math, greetings, simple definitions, or translations), Flash-Lite answers it immediately in the same call and Apigee short-circuits the response back to the client—avoiding a second LLM call.
-* **Deep Reasoning Routing (`COMPLEX`)**: If the prompt is classified as `COMPLEX` (multi-step reasoning, system architecture design, complex code debugging, or deep analysis), Apigee routes the request to the **Gemini 2.5 Pro** (`gemini-2.5-pro`) `TargetEndpoint`.
+The helper model can be any model, including a custom or self-managed model. This repository uses **Gemini 2.5 Flash-Lite** (`gemini-2.5-flash-lite`) as an example helper model:
+* **If the prompt is `SIMPLE`** (factual lookups, basic math, greetings, simple definitions, or translations): The helper model classifies it as `"SIMPLE"` and **answers the prompt directly in the same call**, allowing Apigee to short-circuit and return the response immediately without invoking a larger model.
+* **If the prompt is `COMPLEX`** (multi-step reasoning, architecture design, complex code debugging, or deep analysis): The helper model responds only with `"COMPLEX"` (and an empty answer string) to **avoid unnecessary response token spend**, signaling the Apigee gateway to route the prompt to **Gemini 2.5 Pro** (`gemini-2.5-pro`) or another more capable frontier model.
 * **Keyless Vertex AI Authentication**: Uses Apigee's native `<GoogleAccessToken>` authentication with a dedicated IAM Service Account (`roles/aiplatform.user`).
 
 ---
