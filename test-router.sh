@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ==============================================================================
-# Automated Verification Suite for AI Model Router Prompt Classifier
+# Automated Verification Suite for AI Model Router Prompt Classifier (3-Tier)
 # ==============================================================================
 # Usage:
 #   export ROUTER_URL="https://<YOUR_APIGEE_HOSTNAME>/ai-model-router-prompt"
@@ -19,7 +19,7 @@ if [ -z "${API_KEY}" ]; then
 fi
 
 echo "=============================================================================="
-echo "Testing Apigee AI Model Router: ${ROUTER_URL}"
+echo "Testing Apigee AI Model Router (3-Tier): ${ROUTER_URL}"
 echo "=============================================================================="
 
 echo ""
@@ -35,41 +35,59 @@ else
   exit 1
 fi
 
-echo ""
-echo "==> Test 2: SIMPLE Prompt Short-Circuit (gemini-2.5-flash-lite)"
-HEADERS_2="$(mktemp)"
-BODY_2="$(mktemp)"
-trap 'rm -f "${HEADERS_2}" "${BODY_2}"' EXIT
+HEADERS_TMP="$(mktemp)"
+BODY_TMP="$(mktemp)"
+trap 'rm -f "${HEADERS_TMP}" "${BODY_TMP}"' EXIT
 
-curl -s -D "${HEADERS_2}" -o "${BODY_2}" -X POST "${ROUTER_URL}" \
+echo ""
+echo "==> Test 2: SIMPLE Prompt -> Lightweight Classifier & Fast Responder (gemini-3.5-flash-lite)"
+curl -s -D "${HEADERS_TMP}" -o "${BODY_TMP}" -X POST "${ROUTER_URL}" \
   -H "x-api-key: ${API_KEY}" \
   -H "Content-Type: application/json" \
   -d '{"prompt":"What is the capital of France?"}'
 
-if grep -iq "X-Routed-Model: gemini-2.5-flash-lite" "${HEADERS_2}" && grep -iq "Paris" "${BODY_2}"; then
-  echo "    [PASS] SIMPLE prompt short-circuited by gemini-2.5-flash-lite (X-Short-Circuited: true)."
+if grep -iq "X-Routed-Model: gemini-3.5-flash-lite" "${HEADERS_TMP}" && grep -iq "Paris" "${BODY_TMP}"; then
+  echo "    [PASS] SIMPLE prompt short-circuited by gemini-3.5-flash-lite (X-Model-Tier: Lightweight-Classifier, X-Short-Circuited: true)."
 else
-  echo "    [FAIL] Expected gemini-2.5-flash-lite short-circuit with Paris, got:"
-  cat "${HEADERS_2}"
-  cat "${BODY_2}"
+  echo "    [FAIL] Expected gemini-3.5-flash-lite short-circuit with Paris, got:"
+  cat "${HEADERS_TMP}"
+  cat "${BODY_TMP}"
   exit 1
 fi
 
 echo ""
-echo "==> Test 3: COMPLEX Prompt Routing (gemini-2.5-pro)"
-RES_3=$(curl -s -X POST "${ROUTER_URL}" \
+echo "==> Test 3: MEDIUM Prompt -> Mid-Tier Workhorse (gemini-3.8-flash)"
+curl -s -D "${HEADERS_TMP}" -o "${BODY_TMP}" -X POST "${ROUTER_URL}" \
   -H "x-api-key: ${API_KEY}" \
   -H "Content-Type: application/json" \
-  -d '{"prompt":"Design a multi-region active-active microservices architecture on GKE with Cloud Spanner and Apigee X, detailing the failover sequence and CAP theorem trade-offs."}')
+  -d '{"prompt":"Write a Python function to parse a CSV file and return the average of a numeric column using the csv module, including basic error handling."}'
 
-if echo "${RES_3}" | grep -iq '"modelVersion".*"gemini-2.5-pro"'; then
-  echo "    [PASS] COMPLEX prompt routed to gemini-2.5-pro TargetEndpoint."
+if grep -iq "X-Routed-Model: gemini-3.8-flash" "${HEADERS_TMP}" && grep -iq '"modelVersion".*"gemini-3.8-flash"' "${BODY_TMP}"; then
+  echo "    [PASS] MEDIUM prompt routed to gemini-3.8-flash (X-Model-Tier: Mid-Tier-Workhorse)."
 else
-  echo "    [FAIL] Expected gemini-2.5-pro response, got: ${RES_3}"
+  echo "    [FAIL] Expected gemini-3.8-flash response, got:"
+  cat "${HEADERS_TMP}"
+  cat "${BODY_TMP}"
+  exit 1
+fi
+
+echo ""
+echo "==> Test 4: COMPLEX Prompt -> High-Reasoning & Flagship Tier (gemini-4-argon)"
+curl -s -D "${HEADERS_TMP}" -o "${BODY_TMP}" -X POST "${ROUTER_URL}" \
+  -H "x-api-key: ${API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt":"Design a multi-region active-active microservices architecture on GKE with Cloud Spanner and Apigee X, detailing the failover sequence and CAP theorem trade-offs."}'
+
+if grep -iq "X-Routed-Model: gemini-4-argon" "${HEADERS_TMP}" && grep -iq '"modelVersion".*"gemini-4-argon"' "${BODY_TMP}"; then
+  echo "    [PASS] COMPLEX prompt routed to gemini-4-argon (X-Model-Tier: High-Reasoning-Flagship)."
+else
+  echo "    [FAIL] Expected gemini-4-argon response, got:"
+  cat "${HEADERS_TMP}"
+  cat "${BODY_TMP}"
   exit 1
 fi
 
 echo ""
 echo "=============================================================================="
-echo "ALL 3 AI MODEL ROUTER TESTS PASSED!"
+echo "ALL 4 AI MODEL ROUTER TESTS PASSED!"
 echo "=============================================================================="

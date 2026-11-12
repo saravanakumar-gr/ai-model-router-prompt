@@ -25,11 +25,23 @@
                 <Name>prompt-router-AM-SetSimpleResponse</Name>
                 <Condition>flashlite.classification ~~ "(?s).*classification.\s*:\s*.SIMPLE.*"</Condition>
             </Step>
+            <Step>
+                <Name>prompt-router-AM-SetMediumHeaders</Name>
+                <Condition>flashlite.classification ~~ "(?s).*classification.\s*:\s*.MEDIUM.*"</Condition>
+            </Step>
+            <Step>
+                <Name>prompt-router-AM-SetComplexHeaders</Name>
+                <Condition>flashlite.classification ~~ "(?s).*classification.\s*:\s*.COMPLEX.*"</Condition>
+            </Step>
         </Response>
     </PostFlow>
-    <RouteRule name="GeminiProTarget">
+    <RouteRule name="GeminiFlashTarget">
+        <Condition>flashlite.classification ~~ "(?s).*classification.\s*:\s*.MEDIUM.*"</Condition>
+        <TargetEndpoint>gemini-flash-target</TargetEndpoint>
+    </RouteRule>
+    <RouteRule name="GeminiArgonTarget">
         <Condition>flashlite.classification ~~ "(?s).*classification.\s*:\s*.COMPLEX.*"</Condition>
-        <TargetEndpoint>gemini-pro-target</TargetEndpoint>
+        <TargetEndpoint>gemini-argon-target</TargetEndpoint>
     </RouteRule>
     <RouteRule name="NoRoute"/>
 </ProxyEndpoint>

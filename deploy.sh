@@ -8,7 +8,7 @@ set -euo pipefail
 #   export PROJECT_ID="<YOUR_GCP_PROJECT_ID>"
 #   export APIGEE_ENV="<YOUR_APIGEE_ENV>"
 #   export APIGEE_HOST="<YOUR_APIGEE_HOSTNAME>"
-#   export VERTEX_REGION="europe-west4" # Optional (defaults to europe-west4)
+#   export VERTEX_REGION="global" # Optional (defaults to global)
 #   ./deploy.sh
 # ==============================================================================
 
@@ -18,7 +18,12 @@ cd "${SCRIPT_DIR}"
 PROJECT_ID="${PROJECT_ID:-$(gcloud config get-value project 2>/dev/null || echo "<YOUR_GCP_PROJECT_ID>")}"
 APIGEE_ENV="${APIGEE_ENV:-<YOUR_APIGEE_ENV>}"
 APIGEE_HOST="${APIGEE_HOST:-<YOUR_APIGEE_HOSTNAME>}"
-VERTEX_REGION="${VERTEX_REGION:-europe-west4}"
+VERTEX_REGION="${VERTEX_REGION:-global}"
+if [ "${VERTEX_REGION}" = "global" ]; then
+  VERTEX_ENDPOINT="aiplatform.googleapis.com"
+else
+  VERTEX_ENDPOINT="${VERTEX_REGION}-aiplatform.googleapis.com"
+fi
 PROXY_NAME="${PROXY_NAME:-ai-model-router-prompt}"
 SA_NAME="${SA_NAME:-llm-proxy}"
 SA_EMAIL="${SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
@@ -69,7 +74,7 @@ else
   echo "    Service Account ${SA_EMAIL} already exists."
 fi
 
-echo "==> 3. Packaging ${PROXY_NAME} bundle (substituting PROJECT_ID=${PROJECT_ID}, VERTEX_REGION=${VERTEX_REGION})..."
+echo "==> 3. Packaging ${PROXY_NAME} bundle (substituting PROJECT_ID=${PROJECT_ID}, VERTEX_REGION=${VERTEX_REGION}, VERTEX_ENDPOINT=${VERTEX_ENDPOINT})..."
 BUILD_DIR="$(mktemp -d)"
 trap 'rm -rf "${BUILD_DIR}"' EXIT
 cp -R apiproxy "${BUILD_DIR}/apiproxy"
@@ -81,6 +86,7 @@ for path in glob.glob('${BUILD_DIR}/apiproxy/**/*.xml', recursive=True):
         content = f.read()
     content = content.replace('<YOUR_GCP_PROJECT_ID>', '${PROJECT_ID}')
     content = content.replace('<VERTEX_REGION>', '${VERTEX_REGION}')
+    content = content.replace('<VERTEX_ENDPOINT>', '${VERTEX_ENDPOINT}')
     with open(path, 'w') as f:
         f.write(content)
 "

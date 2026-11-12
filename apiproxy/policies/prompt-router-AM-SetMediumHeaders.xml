@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="prompt-router-AM-SetMediumHeaders">
+    <DisplayName>AM-SetMediumHeaders</DisplayName>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <Set>
+        <Headers>
+            <Header name="X-Model-Classification">MEDIUM</Header>
+            <Header name="X-Model-Tier">Mid-Tier-Workhorse</Header>
+            <Header name="X-Routed-Model">gemini-3.8-flash</Header>
+            <Header name="X-Short-Circuited">false</Header>
+        </Headers>
+    </Set>
+    <AssignTo createNew="false" transport="http" type="response"/>
+</AssignMessage>

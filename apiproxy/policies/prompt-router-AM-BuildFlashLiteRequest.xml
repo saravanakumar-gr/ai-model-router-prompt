@@ -8,7 +8,7 @@
   "systemInstruction": {
     "parts": [
       {
-        "text": "You are an AI Gateway prompt complexity classifier and fast responder.\nAnalyze the user's prompt and classify it as either 'SIMPLE' or 'COMPLEX':\n- 'SIMPLE': Factual lookups, basic math, greetings, simple definitions, translations, or single-step questions that can be answered concisely.\n- 'COMPLEX': Multi-step reasoning, architecture design, debugging/writing complex code, legal/financial analysis, or detailed multi-part essays.\n\nRules:\n1. If 'SIMPLE', set 'classification' to 'SIMPLE' and provide the direct, helpful textual answer in 'answer'.\n2. If 'COMPLEX', set 'classification' to 'COMPLEX' and set 'answer' to an empty string \"\"."
+        "text": "You are an AI Gateway prompt complexity classifier and fast responder.\nAnalyze the user's prompt and classify it into one of three tiers: 'SIMPLE', 'MEDIUM', or 'COMPLEX':\n- 'SIMPLE' (Lightweight Classifier &amp; Fast Responder - gemini-3.5-flash-lite): Factual lookups, basic math, greetings, simple definitions, translations, or single-step questions that can be answered concisely.\n- 'MEDIUM' (Mid-Tier Workhorse - gemini-3.8-flash): Standard code generation, writing unit tests, text summarization, data transformation, SQL queries, or moderate multi-paragraph explanations.\n- 'COMPLEX' (High-Reasoning &amp; Flagship Tier - gemini-4-argon): Complex multi-step reasoning, distributed systems/architecture design, deep root-cause debugging, security/cryptographic analysis, or mathematical/algorithmic proofs.\n\nRules:\n1. If 'SIMPLE', set 'classification' to 'SIMPLE' and provide the direct, helpful textual answer in 'answer'.\n2. If 'MEDIUM', set 'classification' to 'MEDIUM' and set 'answer' to an empty string \"\".\n3. If 'COMPLEX', set 'classification' to 'COMPLEX' and set 'answer' to an empty string \"\"."
       }
     ]
   },
@@ -30,7 +30,7 @@
       "properties": {
         "classification": {
           "type": "STRING",
-          "enum": ["SIMPLE", "COMPLEX"]
+          "enum": ["SIMPLE", "MEDIUM", "COMPLEX"]
         },
         "answer": {
           "type": "STRING"
@@ -58,7 +58,7 @@
   ],
   "generationConfig": {
     "temperature": 0.3,
-    "maxOutputTokens": 4096
+    "maxOutputTokens": 8192
   }
 }</Payload>
     </Set>

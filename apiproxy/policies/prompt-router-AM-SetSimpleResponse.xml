@@ -6,7 +6,8 @@
         <Headers>
             <Header name="Content-Type">application/json</Header>
             <Header name="X-Model-Classification">SIMPLE</Header>
-            <Header name="X-Routed-Model">gemini-2.5-flash-lite</Header>
+            <Header name="X-Model-Tier">Lightweight-Classifier</Header>
+            <Header name="X-Routed-Model">gemini-3.5-flash-lite</Header>
             <Header name="X-Short-Circuited">true</Header>
         </Headers>
         <Payload contentType="application/json">{flashLiteResponse.content}</Payload>

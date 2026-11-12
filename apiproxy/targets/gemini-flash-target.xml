@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TargetEndpoint name="gemini-flash-target">
+    <HTTPTargetConnection>
+        <Properties>
+            <Property name="connect.timeout.millis">10000</Property>
+            <Property name="io.timeout.millis">300000</Property>
+            <Property name="keepalive.timeout.millis">60000</Property>
+        </Properties>
+        <URL>https://<VERTEX_ENDPOINT>/v1/projects/<YOUR_GCP_PROJECT_ID>/locations/<VERTEX_REGION>/publishers/google/models/gemini-3.8-flash:generateContent</URL>
+        <Authentication>
+            <GoogleAccessToken>
+                <Scopes>
+                    <Scope>https://www.googleapis.com/auth/cloud-platform</Scope>
+                </Scopes>
+            </GoogleAccessToken>
+        </Authentication>
+    </HTTPTargetConnection>
+</TargetEndpoint>

@@ -21,6 +21,6 @@
                 </Scopes>
             </GoogleAccessToken>
         </Authentication>
-        <URL>https://<VERTEX_REGION>-aiplatform.googleapis.com/v1/projects/<YOUR_GCP_PROJECT_ID>/locations/<VERTEX_REGION>/publishers/google/models/gemini-2.5-flash-lite:generateContent</URL>
+        <URL>https://<VERTEX_ENDPOINT>/v1/projects/<YOUR_GCP_PROJECT_ID>/locations/<VERTEX_REGION>/publishers/google/models/gemini-3.5-flash-lite:generateContent</URL>
     </HTTPTargetConnection>
 </ServiceCallout>

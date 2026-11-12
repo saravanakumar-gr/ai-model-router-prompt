@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="prompt-router-AM-SetComplexHeaders">
+    <DisplayName>AM-SetComplexHeaders</DisplayName>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <Set>
+        <Headers>
+            <Header name="X-Model-Classification">COMPLEX</Header>
+            <Header name="X-Model-Tier">High-Reasoning-Flagship</Header>
+            <Header name="X-Routed-Model">gemini-4-argon</Header>
+            <Header name="X-Short-Circuited">false</Header>
+        </Headers>
+    </Set>
+    <AssignTo createNew="false" transport="http" type="response"/>
+</AssignMessage>

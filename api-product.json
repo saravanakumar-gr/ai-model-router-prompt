@@ -2,7 +2,7 @@
   "name": "ai-model-router-prompt-product",
   "displayName": "AI Model Router Prompt Classifier Product",
   "approvalType": "auto",
-  "description": "API Product for AI Model Router Prompt Classifier (Flash-Lite short-circuit + Gemini Pro routing)",
+  "description": "API Product for 3-Tier AI Model Router (gemini-3.5-flash-lite Lightweight Classifier, gemini-3.8-flash Mid-Tier Workhorse, gemini-4-argon High-Reasoning & Flagship Tier)",
   "environments": [
     "<YOUR_APIGEE_ENV>"
   ],

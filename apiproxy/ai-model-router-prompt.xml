@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <APIProxy revision="1" name="ai-model-router-prompt">
     <DisplayName>AI Model Router Prompt Classifier</DisplayName>
-    <Description>Routes prompts based on complexity using Gemini Flash-Lite ServiceCallout classification — short-circuits SIMPLE prompts directly from Flash-Lite and routes COMPLEX prompts to Gemini Pro.</Description>
+    <Description>Routes prompts across three tiers using Gemini 3.5 Flash-Lite ServiceCallout classification — short-circuits SIMPLE prompts directly from gemini-3.5-flash-lite (Lightweight Classifier), routes MEDIUM prompts to gemini-3.8-flash (Mid-Tier Workhorse), and routes COMPLEX prompts to gemini-4-argon (High-Reasoning &amp; Flagship Tier).</Description>
     <BasePaths>/ai-model-router-prompt</BasePaths>
     <Policies>
         <Policy>prompt-router-AM-BuildFlashLiteRequest</Policy>
         <Policy>prompt-router-AM-SetSimpleResponse</Policy>
+        <Policy>prompt-router-AM-SetMediumHeaders</Policy>
+        <Policy>prompt-router-AM-SetComplexHeaders</Policy>
         <Policy>prompt-router-EV-ParseFlashResponse</Policy>
         <Policy>prompt-router-SC-CallGeminiFlashLite</Policy>
         <Policy>verify-api-key-Verify-API-Key</Policy>
@@ -14,6 +16,7 @@
         <ProxyEndpoint>default</ProxyEndpoint>
     </ProxyEndpoints>
     <TargetEndpoints>
-        <TargetEndpoint>gemini-pro-target</TargetEndpoint>
+        <TargetEndpoint>gemini-flash-target</TargetEndpoint>
+        <TargetEndpoint>gemini-argon-target</TargetEndpoint>
     </TargetEndpoints>
 </APIProxy>
